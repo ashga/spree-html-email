@@ -92,7 +92,7 @@
       <% @order.price_adjustment_totals.keys.each do |key| %>
         <tr class="total">
           <td colspan="4"><strong><%= key %></strong></td>
-          <td class="total"><span>&pound;<%= @order.price_adjustment_totals[key].round(2) %></span></td>
+          <td class="total"><span><%= number_to_currency @order.price_adjustment_totals[key] %></span></td>
         </tr>
       <% end %>
     </tfoot>
