@@ -3,10 +3,6 @@
 <tr>
     <td align="center" valign="top" style="padding:20px 0 20px 0">
         <table bgcolor="#FFFFFF" cellspacing="0" cellpadding="10" border="0" width="650" style="border:1px solid #E0E0E0;">
-            <!-- [ header starts here] -->
-            <tr>
-                <td valign="top"><a href="{{store url=""}}"><img src="https://www.kingsfieldcomputers.co.uk/assets/logo.png" alt="{{var store.getFrontendName()}}"  style="margin-bottom:10px;" border="0"/></a></td>
-            </tr>
             <!-- [ middle starts here] -->
             <tr>
                 <td valign="top">
@@ -79,9 +75,9 @@
           <%= truncate(item.variant.product.description, :length => 100, :omission => "...") %>
           <%= "(" + variant_options(item.variant) + ")" unless item.variant .option_values.empty? %>
         </td>
-        <td data-hook="order_item_price" class="price"><span>&pound;<%= item.price.round(2) %></span></td>
+        <td data-hook="order_item_price" class="price"><span><%= number_to_currency item.price %></span></td>
         <td data-hook="order_item_qty"><%= item.quantity %></td>
-        <td data-hook="order_item_total" class="total"><span>&pound;<%= (item.price * item.quantity).round(2) %></span></td>
+        <td data-hook="order_item_total" class="total"><span><%= number_to_currency (item.price * item.quantity) %></span></td>
       </tr>
     <% end %>
   </tbody>
@@ -104,7 +100,7 @@
   <tfoot id="subtotal" data-hook="order_details_subtotal">
     <tr class="total" id="subtotal-row">
       <td colspan="4"><b><%= t(:subtotal) %>:</b></td>
-      <td class="total"><span>&pound;<%= @order.item_total.round(2) %></span></td>
+      <td class="total"><span><%= number_to_currency @order.item_total%></span></td>
     </tr>
   </tfoot>
   <tfoot id="order-charges" data-hook="order_details_adjustments">
@@ -112,7 +108,7 @@
     <% next if (adjustment.originator_type == 'Spree::TaxRate') and (adjustment.amount == 0) %>
       <tr class="total">
         <td colspan="4"><strong><%= adjustment.label %></strong></td>
-        <td class="total"><span>&pound;<%= adjustment.amount.round(2) %></span></td>
+        <td class="total"><span><%= number_to_currency adjustment.amount %></span></td>
       </tr>
     <% end %>
   </tfoot>
