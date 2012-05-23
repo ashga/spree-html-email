@@ -74,7 +74,7 @@
           <%= adjustment.label %>
         </td>
         <td class="total number">
-          <%= number_to_currency adjustment.amount %>
+          <%= number_to_currency(adjustment.amount) %>
         </td>
       </tr>
     <% end %>
@@ -85,7 +85,7 @@
         <%= t(:order_total) %>
       </td>
       <td class="total number">
-        <span id="order_total"><%= number_to_currency order.total %></span>
+        <span id="order_total"><%= number_to_currency(order.total) %></span>
       </td>
     </tr>
   </tbody>
