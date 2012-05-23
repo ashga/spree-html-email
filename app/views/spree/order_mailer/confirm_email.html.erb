@@ -4,14 +4,9 @@
 <tr>
     <td align="center" valign="top" style="padding:20px 0 20px 0">
         <table bgcolor="#FFFFFF" cellspacing="0" cellpadding="10" border="0" width="650" style="border:1px solid #E0E0E0;">
-            <!-- [ header starts here] -->
-            <tr>
-                <td valign="top"><a href="{{store url=""}}"><img src="{{skin url="images/logo_email.gif" _area='frontend'}}" alt="{{var store.getFrontendName()}}"  style="margin-bottom:10px;" border="0"/></a></td>
-            </tr>
-            <!-- [ middle starts here] -->
             <tr>
                 <td valign="top">
-                    <h1 style="font-size:22px; font-weight:normal; line-height:22px; margin:0 0 11px 0;"">Hello, <%= @order.name %></h1>
+                    <h1 style="font-size:22px; font-weight:normal; line-height:22px; margin:0 0 11px 0;">Hello, <%= @order.name %></h1>
                     <p style="font-size:12px; line-height:16px; margin:0;">
                         Thank you for your order from Kingsfield Computers.
                         Once your package ships we will send an email with a link to track your order.
@@ -19,6 +14,7 @@
                         If you have any questions about your order please contact us at <a href="mailto:sales@kingsfieldcomputers.co.uk" style="color:#1E7EC8;">sales@kingsfieldcomputers.co.uk</a> or call us at <span class="nobr">01604 795 000</span> Monday - Friday, 9am - 5pm .
                     </p>
                     <p style="font-size:12px; line-height:16px; margin:0;">Your order confirmation is below. Thank you again for your business.</p>
+                </td>
             </tr>
             <tr>
                 <td>
@@ -47,7 +43,19 @@
                             </td>
                             <td>&nbsp;</td>
                             <td valign="top" style="font-size:12px; padding:7px 9px 9px 9px; border-left:1px solid #EAEAEA; border-bottom:1px solid #EAEAEA; border-right:1px solid #EAEAEA;">
-                                {{var payment_html}}
+                                <div class="payment-info">
+                                <% unless @order.creditcards.empty? %>
+                                  <span class="cc-type">
+                                    <%= image_tag "creditcards/icons/#{@order.creditcards.first.cc_type}.png" %>
+                                    <%= t(:ending_in)%> <%= @order.creditcards.first.last_digits %>
+                                  </span>
+                                  <br />
+                                  <span class="full-name">
+                                    <%= @order.creditcards.first.first_name %>
+                                    <%= @order.creditcards.first.last_name %>
+                                  </span>
+                                <% end %>
+                              </div>
                             </td>
                         </tr>
                         </tbody>
@@ -77,19 +85,20 @@
         </td>
         <td data-hook="order_item_description">
           <h4><%= item.variant.product.name %></h4>
+          Part No: <%= item.variant.product.sku %><br/>
           <%= truncate(item.variant.product.description, :length => 100, :omission => "...") %>
           <%= "(" + variant_options(item.variant) + ")" unless item.variant .option_values.empty? %>
         </td>
-        <td data-hook="order_item_price" class="price"><span><%= number_to_currency(item.price, :unit => "&pound;", :separator => ",", :delimiter => "") %></span></td>
+        <td data-hook="order_item_price" class="price"><span><%= number_to_currency(item.price, :unit => "&pound;", :separator => ".", :delimiter => ",") %></span></td>
         <td data-hook="order_item_qty"><%= item.quantity %></td>
-        <td data-hook="order_item_total" class="total"><span><%= number_to_currency (item.price * item.quantity, :unit => "&pound;", :separator => ",", :delimiter => "") %></span></td>
+        <td data-hook="order_item_total" class="total"><span><%= number_to_currency(item.price * item.quantity, :unit => "&pound;", :separator => ".", :delimiter => ",") %></span></td>
       </tr>
     <% end %>
   </tbody>
   <tfoot id="order-total" data-hook="order_details_total">
     <tr class="total">
       <td colspan="4"><b><%= t(:order_total) %>:</b></td>
-      <td class="total"><span id="order_total"><%= number_to_currency @order.total %></span></td>
+      <td class="total"><span id="order_total"><%= number_to_currency(@order.total, :unit => "&pound;", :separator => ".", :delimiter => ",") %></span></td>
     </tr>
   </tfoot>
   <% if @order.price_adjustment_totals.present? %>
@@ -97,7 +106,7 @@
       <% @order.price_adjustment_totals.keys.each do |key| %>
         <tr class="total">
           <td colspan="4"><strong><%= key %></strong></td>
-          <td class="total"><span><%= number_to_currency(@order.price_adjustment_totals[key], :unit => "&pound;", :separator => ",", :delimiter => "") %></span></td>
+          <td class="total"><span><%= number_to_currency(@order.price_adjustment_totals[key], :unit => "&pound;", :separator => ".", :delimiter => ",") %></span></td>
         </tr>
       <% end %>
     </tfoot>
@@ -105,7 +114,7 @@
   <tfoot id="subtotal" data-hook="order_details_subtotal">
     <tr class="total" id="subtotal-row">
       <td colspan="4"><b><%= t(:subtotal) %>:</b></td>
-      <td class="total"><span><%= number_to_currency (@order.item_total, :unit => "&pound;", :separator => ",", :delimiter => "") %></span></td>
+      <td class="total"><span><%= number_to_currency(@order.item_total, :unit => "&pound;", :separator => ".", :delimiter => ",") %></span></td>
     </tr>
   </tfoot>
   <tfoot id="order-charges" data-hook="order_details_adjustments">
@@ -113,7 +122,7 @@
     <% next if (adjustment.originator_type == 'Spree::TaxRate') and (adjustment.amount == 0) %>
       <tr class="total">
         <td colspan="4"><strong><%= adjustment.label %></strong></td>
-        <td class="total"><span><%= number_to_currency (adjustment.amount, :unit => "&pound;", :separator => ",", :delimiter => "") %></span></td>
+        <td class="total"><span><%= number_to_currency(adjustment.amount, :unit => "&pound;", :separator => ".", :delimiter => ",") %></span></td>
       </tr>
     <% end %>
   </tfoot>
