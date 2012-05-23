@@ -80,9 +80,9 @@
           <%= truncate(item.variant.product.description, :length => 100, :omission => "...") %>
           <%= "(" + variant_options(item.variant) + ")" unless item.variant .option_values.empty? %>
         </td>
-        <td data-hook="order_item_price" class="price"><span><%= number_to_currency item.price %></span></td>
+        <td data-hook="order_item_price" class="price"><span><%= number_to_currency(item.price, :unit => "&pound;", :separator => ",", :delimiter => "") %></span></td>
         <td data-hook="order_item_qty"><%= item.quantity %></td>
-        <td data-hook="order_item_total" class="total"><span><%= number_to_currency (item.price * item.quantity) %></span></td>
+        <td data-hook="order_item_total" class="total"><span><%= number_to_currency (item.price * item.quantity, :unit => "&pound;", :separator => ",", :delimiter => "") %></span></td>
       </tr>
     <% end %>
   </tbody>
@@ -97,7 +97,7 @@
       <% @order.price_adjustment_totals.keys.each do |key| %>
         <tr class="total">
           <td colspan="4"><strong><%= key %></strong></td>
-          <td class="total"><span><%= number_to_currency @order.price_adjustment_totals[key] %></span></td>
+          <td class="total"><span><%= number_to_currency(@order.price_adjustment_totals[key], :unit => "&pound;", :separator => ",", :delimiter => "") %></span></td>
         </tr>
       <% end %>
     </tfoot>
@@ -105,7 +105,7 @@
   <tfoot id="subtotal" data-hook="order_details_subtotal">
     <tr class="total" id="subtotal-row">
       <td colspan="4"><b><%= t(:subtotal) %>:</b></td>
-      <td class="total"><span><%= number_to_currency @order.item_total %></span></td>
+      <td class="total"><span><%= number_to_currency (@order.item_total, :unit => "&pound;", :separator => ",", :delimiter => "") %></span></td>
     </tr>
   </tfoot>
   <tfoot id="order-charges" data-hook="order_details_adjustments">
@@ -113,7 +113,7 @@
     <% next if (adjustment.originator_type == 'Spree::TaxRate') and (adjustment.amount == 0) %>
       <tr class="total">
         <td colspan="4"><strong><%= adjustment.label %></strong></td>
-        <td class="total"><span><%= number_to_currency adjustment.amount %></span></td>
+        <td class="total"><span><%= number_to_currency (adjustment.amount, :unit => "&pound;", :separator => ",", :delimiter => "") %></span></td>
       </tr>
     <% end %>
   </tfoot>
@@ -146,11 +146,10 @@
                     </table>
                     <br/>
                     
-                    <p style="font-size:12px; margin:0 0 10px 0">{{var order.getEmailCustomerNote()}}</p>
                 </td>
             </tr>
             <tr>
-                <td bgcolor="#EAEAEA" align="center" style="background:#EAEAEA; text-align:center;"><center><p style="font-size:12px; margin:0;">Thank you, <strong>www.kingsfieldcomputer.co.uk</strong></p></center></td>
+                <td bgcolor="#EAEAEA" align="center" style="background:#EAEAEA; text-align:center;"><center><p style="font-size:12px; margin:0;">Thank you</p></center></td>
             </tr>
         </table>
     </td>
