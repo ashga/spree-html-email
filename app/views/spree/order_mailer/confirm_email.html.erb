@@ -95,6 +95,12 @@
       </tr>
     <% end %>
   </tbody>
+  <tfoot id="order-total" data-hook="order_details_total">
+    <tr class="total">
+      <td colspan="4"><b><%= t(:order_total) %>:</b></td>
+      <td class="total"><span id="order_total"><%= number_to_currency(@order.total, :unit => "&pound;", :separator => ".", :delimiter => ",") %></span></td>
+    </tr>
+  </tfoot>
   <% if @order.price_adjustment_totals.present? %>
     <tfoot id="price-adjustments" data-hook="order_details_price_adjustments">
       <% @order.price_adjustment_totals.keys.each do |key| %>
@@ -119,12 +125,6 @@
         <td class="total"><span><%= number_to_currency(adjustment.amount, :unit => "&pound;", :separator => ".", :delimiter => ",") %></span></td>
       </tr>
     <% end %>
-  </tfoot>
-  <tfoot id="order-total" data-hook="order_details_total">
-    <tr class="total">
-      <td colspan="4"><b><%= t(:order_total) %>:</b></td>
-      <td class="total"><span id="order_total"><%= number_to_currency(@order.total, :unit => "&pound;", :separator => ".", :delimiter => ",") %></span></td>
-    </tr>
   </tfoot>
 </table>
                     <table cellspacing="0" cellpadding="0" border="0" width="650">
